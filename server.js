@@ -41,9 +41,13 @@ io.on('connection', function(socket){
     */
     // So, because of reason in above comment, this could be undefined
     var userRoom = rooms[msg.to];
-
-    // If user is currently in their room 
-    if (userRoom[0]) {
+    console.log('userRoom', userRoom);
+    // If user is currently in their room, this is hideous but it's cuz socket.io
+    // is using arrays as if they were objects and it's super annoying.
+    // I need to come up with a better way to express this
+    if ((Object.keys(userRoom).length === 1 && userRoom.messages === undefined) || 
+            Object.keys(userRoom).length === 2) {
+        console.log('message was sent', msg.text)
         io.to(msg.to).emit('chat message', msg); 
     } else {
         // if user's msg's array exists, push msg to it. Else, create the array and add msg
