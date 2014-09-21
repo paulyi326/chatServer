@@ -23,15 +23,22 @@
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     var socket = io();
-    socket.emit('join', {username: 'paul'});
+    var name = prompt('what is your name?');
+    socket.emit('join', name);
     $('form').submit(function(){
-      socket.emit('chat message', $('#m').val());
+      var to = prompt('who do you want to send it to?');
+      var msg = {
+        to: to,
+        from: name,
+        text: $('#m').val()
+      }
+      socket.emit('chat message', msg);
       $('#m').val('');
       return false;
     });
 
     socket.on('chat message', function(msg) {
-      $('#messages').append($('<li>').text(msg));
+      $('#messages').append($('<li>').text(msg.from + ': ' + msg.text));
     });
   </script>
 </html>
