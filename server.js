@@ -40,6 +40,7 @@ io.on('connection', function(socket){
         the other user joins, he'll just join the room that was created?
     */
     // So, because of reason in above comment, this could be undefined
+    console.log('msg obj', msg);
     var userRoom = rooms[msg.to];
     console.log('userRoom', userRoom);
     // If user is currently in their room, this is hideous but it's cuz socket.io
