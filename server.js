@@ -2,7 +2,8 @@ var app = require('express')();
 var http = require('http').Server(app);
 var io = require('socket.io')(http);
 
-var port = process.env.port || 8100;
+var port = process.env.port || 8000;
+
 
 app.get('/', function(req, res){
   res.sendFile(__dirname + '/index.html');
@@ -13,6 +14,12 @@ io.on('connection', function(socket){
 
   socket.on('disconnect', function() {
     console.log('user disconnected');
+  });
+
+  socket.on('join', function(user) {
+    socket.join(user.username);
+    console.log(user.username + ' has joined');
+    io.sockets.in(user.username).emit('chat message', user);
   });
 
   socket.on('chat message', function(msg) {
