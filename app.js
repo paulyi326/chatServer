@@ -13,19 +13,23 @@ app.use(bodyParser.urlencoded({
 }));
 
 // enable CORS
-app.all('*', function(req, res, next) {
-    // res.header("Access-Control-Allow-Origin", "*");
-    // res.header("Access-Control-Allow-Headers", "Content-Type, X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Date, X-Api-Version, X-File-Name, Authorization");
-    // res.header("Access-Control-Allow-Methods", "GET, POST");
-    var headers = {
-      "access-control-allow-origin": "*",
-      "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "access-control-allow-headers": "content-type, accept",
-      "access-control-max-age": 10, // Seconds.
-      'Content-Type': "application/json"
-    };
-    res.set(headers);
+var allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', '*');
+  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
+  res.header('Access-Control-Allow-Headers', 'X-Requested-With, Accept, Origin, Referer, User-Agent, Content-Type, Authorization');
+ 
+  // intercept OPTIONS method
+  if (req.method === 'OPTIONS') {
+    res.send(200);
+  }
+  else {
     next();
+  }
+};
+
+app.configure(function() {
+    app.use(allowCrossDomain);   // make sure this is is called before the router
+    app.use(app.router);      // not entirely necessary--will be automatically called with the first .get()
 });
 
 // api.createDummyUser();
