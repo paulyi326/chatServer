@@ -14,8 +14,9 @@ exports.saveMessage = function(msg) {
             if (user) {
                 // if this is first msg sent to this person, msg array needs to be created
                 user.messages[msg.from] = user.messages[msg.from] || [];
-                
+
                 user.messages[msg.from].push(msg.text);
+                user.save()
                 console.log('message saved in db');
             } else {
                 console.log('user could not be found');
