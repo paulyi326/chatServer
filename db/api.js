@@ -16,23 +16,33 @@ exports.saveMessage = function(msg) {
 };
 
 exports.getMessages = function(req, res, io) {
+    // the ids come in on the req.query obj as a string for some reason
+    // '+' operator converts to number
+    var userID = +req.query.userID;
+    var friendID = +req.query.friendID;
+
+    // for reasons I do not understand, if there is any uncaught
+    // error in here, it shows as a CORS error on the client side
     db.users.findOne({
-        id: req.query.userID
+        id: userID
     }, function(err, user) {
         if (err) {
-            res.status(404).send({ err: err, msg: 'user not found' });
+            res.status(404).send({ err: err, msg: 'error trying to find user' });
         } else {
-            var messages = user.messages[req.query.friendID];
-            for (var i = 0; i < messages.length; i++) {
-                var msg = {
-                    to: req.query.userID,
-                    from: req.query.friendID,
-                    text: messages[i]
+            if (user) {
+                var messages = user.messages[friendID];
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = {
+                        to: userID,
+                        from: friendID,
+                        text: messages[i]
+                    }
+                    io.to(userID).emit('chat message', msg);
                 }
-                io.to(user.id).emit('chat message', msg);
+                res.status(200).send('messages sent. I hope you received them');
+            } else {
+                res.send('could not find the user')
             }
-            // res.status(200).send('messages sent. I hope you received them');
-            res.json({msg: 'This is CORS-enabled for all origins!'});
         }
     }); 
 };

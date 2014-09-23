@@ -4,17 +4,10 @@ var io = require('socket.io')(http);
 var api = require('./db/api.js');
 var cors = require('cors');
 
-var mongojs = require('mongojs');
-var chatUrl = process.env.chatUrl || 'chat';
-var db = mongojs(chatUrl, ['users']);
-
-
 // var bodyParser = require('body-parser');
 // app.use(bodyParser.urlencoded({
 //     extended: true
 // }));
-
-// app.use(cors());
 
 // takes data the client sends to server in post request
 // and sets them as keys on the body property
@@ -25,39 +18,8 @@ var db = mongojs(chatUrl, ['users']);
 //     res.sendFile(__dirname + '/index.html');
 // });
 
-// api.createDummyUser();
-
 app.get('/getMessages', cors(), function(req, res) {
-    // api.getMessages(req, res, io);
-    console.log('chat url',chatUrl);
-
-    console.log('req.query', req.query);
-
-    db.users.findOne({
-        id: 7
-    }, function(err, user) {
-        console.log('err', err);
-        console.log('user', user);
-        if (err) {
-            res.status(404).send({ err: err, msg: 'user not found' });
-        } else {
-            if (user) {
-                var messages = user.messages[req.query.friendID];
-                for (var i = 0; i < messages.length; i++) {
-                    var msg = {
-                        to: req.query.userID,
-                        from: req.query.friendID,
-                        text: messages[i]
-                    }
-                    io.to(user.id).emit('chat message', msg);
-                }
-                res.status(200).send('messages sent. I hope you received them');
-                // res.send('hi idk what is going on');
-            } else {
-                res.send('could not find the user')
-            }
-        }
-    }); 
+    api.getMessages(req, res, io);
 });
 
 io.on('connection', function(socket){
