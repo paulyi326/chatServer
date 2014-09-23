@@ -22,6 +22,7 @@ app.all('*', function(req, res, next) {
       'Content-Type': "application/json"
     };
     res.set(headers);
+    console.log('headers set')
     next();
 });
 
