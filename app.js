@@ -28,25 +28,32 @@ var db = mongojs(chatUrl, ['users']);
 app.get('/getMessages', cors(), function(req, res) {
     // api.getMessages(req, res, io);
     console.log('chat url',chatUrl);
-    console.log('db', db);
+
+    console.log('req.query', req.query);
+
     db.users.findOne({
         id: req.query.userID
     }, function(err, user) {
+        console.log('err', err);
+        console.log('user', user);
         if (err) {
             res.status(404).send({ err: err, msg: 'user not found' });
         } else {
-            var messages = user.messages[req.query.friendID];
-            for (var i = 0; i < messages.length; i++) {
-                var msg = {
-                    to: req.query.userID,
-                    from: req.query.friendID,
-                    text: messages[i]
+            if (user) {
+                var messages = user.messages[req.query.friendID];
+                for (var i = 0; i < messages.length; i++) {
+                    var msg = {
+                        to: req.query.userID,
+                        from: req.query.friendID,
+                        text: messages[i]
+                    }
+                    io.to(user.id).emit('chat message', msg);
                 }
-                io.to(user.id).emit('chat message', msg);
+                res.status(200).send('messages sent. I hope you received them');
+                // res.send('hi idk what is going on');
+            } else {
+                res.send('could not find the user')
             }
-            console.log('req.query', req.query)
-            res.status(200).send('messages sent. I hope you received them');
-            // res.send('hi idk what is going on');
         }
     }); 
 });
