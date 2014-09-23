@@ -21,7 +21,8 @@ var cors = require('cors');
 // });
 
 app.get('/getMessages', cors(), function(req, res) {
-    api.getMessages(req, res, io);
+    // api.getMessages(req, res, io);
+    res.send('hiiii')
 });
 
 io.on('connection', function(socket){
