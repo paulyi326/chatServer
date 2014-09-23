@@ -16,8 +16,9 @@ exports.saveMessage = function(msg) {
                 user.messages[msg.from] = user.messages[msg.from] || [];
 
                 user.messages[msg.from].push(msg.text);
-                user.save()
-                console.log('message saved in db');
+                db.users.save(user, function(err, user, lastErrObj) {
+                    console.log('message saved in db');
+                });
             } else {
                 console.log('user could not be found');
             }
