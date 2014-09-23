@@ -25,6 +25,8 @@ var db = mongojs(chatUrl, ['users']);
 //     res.sendFile(__dirname + '/index.html');
 // });
 
+api.createDummyUser();
+
 app.get('/getMessages', cors(), function(req, res) {
     // api.getMessages(req, res, io);
     console.log('chat url',chatUrl);
