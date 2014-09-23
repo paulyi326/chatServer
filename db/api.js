@@ -3,14 +3,20 @@ var chatUrl = process.env.chatUrl || 'chat';
 var db = mongojs(chatUrl, ['users']);
 
 exports.saveMessage = function(msg) {
+    console.log(msg);
+
     db.users.findOne({
         id: msg.to
     }, function(err, user) {
         if (err) {
-            res.status(404).send({ err: err, msg: 'user not found' });
+            console.log('error in finding user');
         } else {
-            user.messages[msg.from].push(msg.text);
-            console.log('message saved in db');
+            if (user) {
+                user.messages[msg.from].push(msg.text);
+                console.log('message saved in db');
+            } else {
+                console.log('user could not be found');
+            }
         }
     });
 };
