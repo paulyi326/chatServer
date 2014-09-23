@@ -13,16 +13,16 @@ app.use(bodyParser.urlencoded({
 }));
 
 // enable CORS
-var allowCrossDomain = function(req, res, next) {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE');
-  res.header('Access-Control-Allow-Headers', 'X-Requested-With, Accept, Origin, Referer, User-Agent, Content-Type, Authorization');
- 
-  next();
-};
-
-app.configure(function() {
-    app.use(allowCrossDomain);   // make sure this is is called before the router
+app.all('*', function(req, res, next) {
+    var headers = {
+      "access-control-allow-origin": "*",
+      "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
+      "access-control-allow-headers": "content-type, accept",
+      "access-control-max-age": 10, // Seconds.
+      'Content-Type': "application/json"
+    };
+    res.set(headers);
+    next();
 });
 
 // for testing locally
