@@ -22,7 +22,6 @@ var cors = require('cors');
 
 app.get('/getMessages', cors(), function(req, res) {
     api.getMessages(req, res, io);
-    res.json({msg: 'This is CORS-enabled for all origins!'});
 });
 
 io.on('connection', function(socket){

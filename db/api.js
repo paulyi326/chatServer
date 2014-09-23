@@ -31,7 +31,8 @@ exports.getMessages = function(req, res, io) {
                 }
                 io.to(user.id).emit('chat message', msg);
             }
-            res.status(200).send('messages sent. I hope you received them');
+            // res.status(200).send('messages sent. I hope you received them');
+            res.json({msg: 'This is CORS-enabled for all origins!'});
         }
     }); 
 };
