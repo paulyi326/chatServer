@@ -34,7 +34,7 @@ app.get('/getMessages', cors(), function(req, res) {
     console.log('req.query', req.query);
 
     db.users.findOne({
-        id: req.query.userID
+        id: 7
     }, function(err, user) {
         console.log('err', err);
         console.log('user', user);
