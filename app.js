@@ -35,18 +35,18 @@ app.get('/getMessages', cors(), function(req, res) {
         if (err) {
             res.status(404).send({ err: err, msg: 'user not found' });
         } else {
-            // var messages = user.messages[req.query.friendID];
-            // for (var i = 0; i < messages.length; i++) {
-            //     var msg = {
-            //         to: req.query.userID,
-            //         from: req.query.friendID,
-            //         text: messages[i]
-            //     }
-            //     io.to(user.id).emit('chat message', msg);
-            // }
-            // // res.status(200).send('messages sent. I hope you received them');
+            var messages = user.messages[req.query.friendID];
+            for (var i = 0; i < messages.length; i++) {
+                var msg = {
+                    to: req.query.userID,
+                    from: req.query.friendID,
+                    text: messages[i]
+                }
+                io.to(user.id).emit('chat message', msg);
+            }
+            res.status(200).send('messages sent. I hope you received them');
             // res.json({msg: 'This is CORS-enabled for all origins!'});
-            res.send('hiiii success')
+            // res.send('hiiii success');
         }
     }); 
 });
