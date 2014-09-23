@@ -12,6 +12,9 @@ exports.saveMessage = function(msg) {
             console.log('error in finding user');
         } else {
             if (user) {
+                // if this is first msg sent to this person, msg array needs to be created
+                user.messages[msg.from] = user.messages[msg.from] || [];
+                
                 user.messages[msg.from].push(msg.text);
                 console.log('message saved in db');
             } else {
