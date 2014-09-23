@@ -4,6 +4,11 @@ var io = require('socket.io')(http);
 var api = require('./db/api.js');
 var cors = require('cors');
 
+var mongojs = require('mongojs');
+var chatUrl = process.env.chatUrl || 'chat';
+var db = mongojs(chatUrl, ['users']);
+
+
 // var bodyParser = require('body-parser');
 // app.use(bodyParser.urlencoded({
 //     extended: true
@@ -22,7 +27,28 @@ var cors = require('cors');
 
 app.get('/getMessages', cors(), function(req, res) {
     // api.getMessages(req, res, io);
-    res.send('hiiii')
+    console.log('chat url',chatUrl);
+    console.log('db', db);
+    db.users.findOne({
+        id: req.query.userID
+    }, function(err, user) {
+        if (err) {
+            res.status(404).send({ err: err, msg: 'user not found' });
+        } else {
+            // var messages = user.messages[req.query.friendID];
+            // for (var i = 0; i < messages.length; i++) {
+            //     var msg = {
+            //         to: req.query.userID,
+            //         from: req.query.friendID,
+            //         text: messages[i]
+            //     }
+            //     io.to(user.id).emit('chat message', msg);
+            // }
+            // // res.status(200).send('messages sent. I hope you received them');
+            // res.json({msg: 'This is CORS-enabled for all origins!'});
+            res.send('hiiii success')
+        }
+    }); 
 });
 
 io.on('connection', function(socket){
