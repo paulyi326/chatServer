@@ -1,5 +1,6 @@
 var mongojs = require('mongojs');
-var db = mongojs('chat', ['users']);
+var chatUrl = process.env.chatUrl || 'chat';
+var db = mongojs(chatUrl, ['users']);
 
 exports.saveMessage = function(msg) {
     db.users.findOne({
