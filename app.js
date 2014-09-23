@@ -9,7 +9,7 @@ var cors = require('cors');
 //     extended: true
 // }));
 
-app.use(cors());
+// app.use(cors());
 
 // takes data the client sends to server in post request
 // and sets them as keys on the body property
@@ -20,8 +20,9 @@ app.use(cors());
 //     res.sendFile(__dirname + '/index.html');
 // });
 
-app.get('/getMessages', function(req, res) {
+app.get('/getMessages', cors(), function(req, res) {
     api.getMessages(req, res, io);
+    res.json({msg: 'This is CORS-enabled for all origins!'});
 });
 
 io.on('connection', function(socket){
