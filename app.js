@@ -4,35 +4,21 @@ var io = require('socket.io')(http);
 var api = require('./db/api.js');
 var cors = require('cors');
 
-var bodyParser = require('body-parser');
+// var bodyParser = require('body-parser');
+// app.use(bodyParser.urlencoded({
+//     extended: true
+// }));
 
-
-// enable CORS
-// app.all('*', function(req, res, next) {
-//     var headers = {
-//       "access-control-allow-origin": "*",
-//       "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-//       "access-control-allow-headers": "content-type, accept",
-//       "access-control-max-age": 10, // Seconds.
-//       'Content-Type': "application/json"
-//     };
-//     res.set(headers);
-//     console.log('headers set')
-//     next();
-// });
 app.use(cors());
 
 // takes data the client sends to server in post request
 // and sets them as keys on the body property
 // on the request
-app.use(bodyParser.urlencoded({
-    extended: true
-}));
 
 // for testing locally
-app.get('/', function(req, res){
-    res.sendFile(__dirname + '/index.html');
-});
+// app.get('/', function(req, res){
+//     res.sendFile(__dirname + '/index.html');
+// });
 
 app.get('/getMessages', function(req, res) {
     api.getMessages(req, res, io);
