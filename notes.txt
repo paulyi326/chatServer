@@ -2,6 +2,6 @@ moved db call back into api module. uncaught errors were showing up as
 CORS error on client side for some reason
 
 next:
-- client should be able to send messages, and that should be stored on server
 - also messages to your own messages array when you send messages to your friend
 - handle for edge cases like when server goes down
+- for some reason, there are two users in a room sometimes. it's the same user but a different session, so somehow, a user is connecting twice without disconnecting in between

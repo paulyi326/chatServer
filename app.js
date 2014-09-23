@@ -64,7 +64,9 @@ io.on('connection', function(socket){
         // Then I probably want to create the room
 
         // If user is currently in their room
-        if (Object.keys(userRoom).length === 1) {
+        // the '>= 1' is because sometimes the same user is in the room twice 
+        // but under different session ids. Idk why yet.
+        if (Object.keys(userRoom).length >= 1) {
 
             console.log('message was sent', msg.text)
             io.to(msg.to).emit('chat message', msg); 
