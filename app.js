@@ -14,12 +14,8 @@ app.use(bodyParser.urlencoded({
 
 // enable CORS
 app.all('*', function(req, res, next) {
-    var headers = {
-      "access-control-allow-origin": "*",
-      "access-control-allow-methods": "GET, POST, PUT, DELETE, OPTIONS",
-      "access-control-allow-headers": "content-type, accept",
-    };
-    res.set(headers);
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "X-Requested-With");
     next();
 });
 
