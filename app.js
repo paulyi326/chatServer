@@ -23,13 +23,9 @@ app.all('*', function(req, res, next) {
     next();
 });
 
-// api.createDummyUser();
-
 // for testing locally
 app.get('/', function(req, res){
-    // res.sendFile(__dirname + '/index.html');
-    api.getMessages(req, res, io);
-
+    res.sendFile(__dirname + '/index.html');
 });
 
 app.get('/getMessages', function(req, res) {
