@@ -21,7 +21,7 @@ exports.saveMessage = function(msg) {
                     console.log('message saved in db');
                 });
             } else {
-                console.log('user could not be found');
+                console.log('friend user object could not be found');
             }
         }
     });
@@ -42,7 +42,7 @@ exports.saveMessage = function(msg) {
                     console.log('message saved in db');
                 });
             } else {
-                console.log('user could not be found');
+                console.log('current user object could not be found');
             }
         }
     });
