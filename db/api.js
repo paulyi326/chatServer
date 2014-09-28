@@ -49,10 +49,16 @@ exports.saveMessage = function(msg) {
 };
 
 exports.getMessages = function(req, res, io) {
+
+    console.log('inside get messages');
+
     // the ids come in on the req.query obj as a string for some reason
     // '+' operator converts to number
     var userID = +req.query.userID;
     var friendID = +req.query.friendID;
+
+    console.log('userID', userID);
+    console.log('friendID', friendID);
 
     // for reasons I do not understand, if there is any uncaught
     // error in here, it shows as a CORS error on the client side
