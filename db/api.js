@@ -69,6 +69,10 @@ exports.getMessages = function(req, res, io) {
             res.status(404).send({ err: err, msg: 'error trying to find user' });
         } else {
             if (user) {
+                console.log('current user object', user);
+                // create messages array if these two friends have never
+                // exchanged messages yet
+                user.messages[friendID] = user.messages[friendID] || [];
                 var messages = user.messages[friendID];
                 for (var i = 0; i < messages.length; i++) {
                     var msg = {
