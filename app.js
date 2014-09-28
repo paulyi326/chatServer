@@ -79,6 +79,8 @@ io.on('connection', function(socket){
         // save messages to db regardless
         api.saveMessage(msg);
 
+        console.log('rooms after sending to someone who hasnt joined', rooms);
+
 
     });
 });
