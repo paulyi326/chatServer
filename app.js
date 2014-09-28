@@ -57,11 +57,15 @@ io.on('connection', function(socket){
             Maybe create the room, and add it to messages property. Then when
             the other user joins, he'll just join the room that was created?
         */
-        // So, because of reason in above comment, this could be undefined
-        var userRoom = rooms[msg.to];
 
-        // There has to be a check here for if userRoom === undefined
-        // Then I probably want to create the room
+        // create a room for user if it does not exist, due to reasons in above comment
+        if (!rooms[msg.to]) {
+            rooms[msg.to] = [];
+        }
+
+        // have to test this. even if i message someone who has not joined, 
+        // there shouldn't be an error
+        var userRoom = rooms[msg.to];
 
         // If user is currently in their room
         // the '>= 1' is because sometimes the same user is in the room twice 

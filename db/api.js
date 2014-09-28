@@ -5,6 +5,7 @@ var db = mongojs(chatUrl, ['users']);
 exports.saveMessage = function(msg) {
     console.log(msg);
 
+    // save messages to person who is receiving messages
     db.users.findOne({
         id: msg.to
     }, function(err, user) {
@@ -16,6 +17,27 @@ exports.saveMessage = function(msg) {
                 user.messages[msg.from] = user.messages[msg.from] || [];
 
                 user.messages[msg.from].push(msg.text);
+                db.users.save(user, function(err, user, lastErrObj) {
+                    console.log('message saved in db');
+                });
+            } else {
+                console.log('user could not be found');
+            }
+        }
+    });
+
+    // also save messages to whoever is sending the messages
+    db.users.findOne({
+        id: msg.from
+    }, function(err, user) {
+        if (err) {
+            console.log('error in finding user');
+        } else {
+            if (user) {
+                // if this is first msg sent to this person, msg array needs to be created
+                user.messages[msg.to] = user.messages[msg.to] || [];
+
+                user.messages[msg.to].push(msg.text);
                 db.users.save(user, function(err, user, lastErrObj) {
                     console.log('message saved in db');
                 });
