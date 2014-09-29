@@ -41,7 +41,7 @@ io.on('connection', function(socket){
     console.log('auto room', io.sockets.adapter.rooms[socket.id]);
 
     // delete the room that's auto-generated since we dont use it
-    delete io.sockets.adapter.rooms[socket.id];
+    // delete io.sockets.adapter.rooms[socket.id];
 
     var rooms = io.sockets.adapter.rooms;
     var userRoom = rooms[userID];
@@ -86,7 +86,7 @@ io.on('connection', function(socket){
     // save messages to db regardless
     api.saveMessage(msg);
 
-    console.log('rooms after sending to someone who hasnt joined', rooms);
+    console.log('rooms after sending message', rooms);
   });
 });
 
