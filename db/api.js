@@ -45,17 +45,6 @@ exports.getFriends = function(req, res) {
       }
     }
   });
-
-  // just send back dummy data for now
-  // res.send([
-  //   { title: 'Kobe', id: 1 },
-  //   { title: 'Kyrie', id: 2 },
-  //   { title: 'Tim', id: 3 },
-  //   { title: 'Jeremy', id: 4 },
-  //   { title: 'Manu', id: 5 },
-  //   { title: 'Dwight', id: 6 },
-  //   { title: 'paul', id: 7}
-  // ]);
 };
 
 // helper function used in async call to find all of a users friends
@@ -68,7 +57,11 @@ exports.findFriend = function(friendID, callback) {
       callback(err, null);
     } else {
       if (user) {
-        callback(null, user);
+        var friend = {
+          name: user.name,
+          id: user.id
+        }
+        callback(null, friend);
       } else {
         console.log('user not found');
         callback(null, null);
