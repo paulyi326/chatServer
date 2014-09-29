@@ -4,17 +4,7 @@ var io = require('socket.io')(http);
 var api = require('./db/api.js');
 var cors = require('cors');
 
-// var bodyParser = require('body-parser');
-// app.use(bodyParser.urlencoded({
-//   extended: true
-// }));
-
-// takes data the client sends to server in post request
-// and sets them as keys on the body property
-// on the request
-
-// for testing locally
-// app.get('/', function(req, res){
+// app.get('/', function(req, res) {
 //   res.sendFile(__dirname + '/index.html');
 // });
 
@@ -38,10 +28,13 @@ io.on('connection', function(socket){
     socket.join(userID);
     console.log(userID + ' has joined');
 
-    console.log('auto room', io.sockets.adapter.rooms[socket.id]);
+    // manually delete auto-generated rooms. socket.io is supposed to delete all
+    // empty rooms, but it doesn't seem to be doing it, so there are a whole bunch of
+    // empty rooms unless I do this
+    io.sockets.adapter.delAll(socket.id);
 
-    // delete the room that's auto-generated since we dont use it
-    // delete io.sockets.adapter.rooms[socket.id];
+
+    console.log('auto room', io.sockets.adapter.rooms[socket.id]);
 
     var rooms = io.sockets.adapter.rooms;
     var userRoom = rooms[userID];
@@ -56,22 +49,12 @@ io.on('connection', function(socket){
     // hash containing all the rooms
     var rooms = io.sockets.adapter.rooms;
 
-    /* PROBLEM I NEED TO CONSIDER:
-        what happens when server restarts and i send a message
-        to someone who hasn't joined a room since the server went down.
-        Then I'd be sending a message to a room that is undefined
-
-        Maybe create the room, and add it to messages property. Then when
-        the other user joins, he'll just join the room that was created?
-    */
-
-    // create a room for user if it does not exist, due to reasons in above comment
+    // server goes down or restarts, and the user that is being messaged has
+    // not joined since then, his room will be undefined, so we have to create it first
     if (!rooms[msg.to]) {
       rooms[msg.to] = [];
     }
 
-    // have to test this. even if i message someone who has not joined, 
-    // there shouldn't be an error
     var userRoom = rooms[msg.to];
 
     // If user is currently in their room

@@ -23,7 +23,7 @@
   <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
   <script>
     var socket = io();
-    var name = prompt('what is your name?');
+    var name = 'paul';
     socket.emit('join', name);
     $('form').submit(function(){
       var to = prompt('who do you want to send it to?');
