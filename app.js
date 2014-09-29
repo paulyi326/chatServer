@@ -26,11 +26,6 @@ io.on('connection', function(socket){
   // creates a room that is unique to a user
   socket.on('join', function(userID) {
 
-    // manually delete auto-generated rooms. socket.io is supposed to delete all
-    // empty rooms, but it doesn't seem to be doing it, so there are a whole bunch of
-    // empty rooms unless I do this
-    io.sockets.adapter.delAll(socket.id);
-
     // then, create a room with the userID as the room name
     socket.join(userID);
     console.log(userID + ' has joined');
