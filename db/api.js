@@ -3,7 +3,7 @@ var chatUrl = process.env.chatUrl || 'chat';
 var db = mongojs(chatUrl, ['users']);
 var async = require('async');
 
-exports.getFriends = function(req, res) {
+exports.login = function(req, res) {
 
   console.log('req.query', req.query);
 
@@ -32,7 +32,11 @@ exports.getFriends = function(req, res) {
             res.status(404).send('error in finding friends');
           } else {
             if (friends) {
-              res.status(200).send(friends);
+              var userObj = {
+                friends: friends,
+                name: user.name
+              }
+              res.status(200).send(userObj);
             } else {
               res.send('you have no friends');
             }

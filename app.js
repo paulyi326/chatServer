@@ -13,7 +13,7 @@ app.get('/getMessages', cors(), function(req, res) {
 });
 
 app.get('/getFriends', cors(), function(req, res) {
-  api.getFriends(req, res);
+  api.login(req, res);
 });
 
 io.on('connection', function(socket){
@@ -29,8 +29,6 @@ io.on('connection', function(socket){
     // then, create a room with the userID as the room name
     socket.join(userID);
     console.log(userID + ' has joined');
-
-
 
     console.log('auto room', io.sockets.adapter.rooms[socket.id]);
 
