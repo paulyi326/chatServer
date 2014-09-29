@@ -22,6 +22,10 @@ app.get('/getMessages', cors(), function(req, res) {
     api.getMessages(req, res, io);
 });
 
+app.get('/getFriends', cors(), function(req, res) {
+    api.getFriends(req, res);
+});
+
 io.on('connection', function(socket){
     console.log('a user connected');
 
@@ -46,7 +50,10 @@ io.on('connection', function(socket){
     });
 
     socket.on('chat message', function(msg) {
-    // hash containing all the rooms
+
+        console.log('incoming message', msg);
+
+        // hash containing all the rooms
         var rooms = io.sockets.adapter.rooms;
 
         /* PROBLEM I NEED TO CONSIDER:

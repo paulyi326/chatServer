@@ -2,6 +2,25 @@ var mongojs = require('mongojs');
 var chatUrl = process.env.chatUrl || 'chat';
 var db = mongojs(chatUrl, ['users']);
 
+exports.getFriends = function(req, res) {
+
+    console.log('req.query', req.query);
+
+    var userID = +req.query.userID;
+
+    // just send back dummy data for now
+
+    res.send([
+        { title: 'Kobe', id: 1 },
+        { title: 'Kyrie', id: 2 },
+        { title: 'Tim', id: 3 },
+        { title: 'Jeremy', id: 4 },
+        { title: 'Manu', id: 5 },
+        { title: 'Dwight', id: 6 },
+        { title: 'paul', id: 7}
+    ]);
+};
+
 exports.saveMessage = function(msg) {
     console.log(msg);
 
@@ -93,21 +112,3 @@ exports.getMessages = function(req, res, io) {
 exports.createUser = function() {
     
 };
-
-exports.createDummyUser = function() {
-    db.users.insert({ 
-        id: 7, 
-        friendIds: [1, 2, 3, 4, 5, 6], 
-        messages: {
-            1: ['hey kobe', 'hey paul']
-        }
-    }, function(err, value) {
-        if (err) {
-            console.log('err', err);
-        } else {
-            console.log('value', value);
-        }
-    });
-}
-
-
