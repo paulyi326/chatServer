@@ -88,7 +88,7 @@ exports.saveMessage = function(msg) {
         // if this is first msg sent to this person, msg array needs to be created
         user.messages[msg.from] = user.messages[msg.from] || [];
 
-        user.messages[msg.from].push(msg.text);
+        user.messages[msg.from].push({ text: msg.text, fromUsername: msg.fromUsername });
         db.users.save(user, function(err, user, lastErrObj) {
             console.log('message saved in db');
         });
@@ -109,7 +109,7 @@ exports.saveMessage = function(msg) {
         // if this is first msg sent to this person, msg array needs to be created
         user.messages[msg.to] = user.messages[msg.to] || [];
 
-        user.messages[msg.to].push(msg.text);
+        user.messages[msg.to].push({ text: msg.text, fromUsername: msg.fromUsername });
         db.users.save(user, function(err, user, lastErrObj) {
             console.log('message saved in db');
         });
@@ -150,7 +150,8 @@ exports.getMessages = function(req, res, io) {
           var msg = {
             to: userID,
             from: friendID,
-            text: messages[i]
+            text: messages[i].text,
+            fromUsername: messages[i].fromUsername
           }
           io.to(userID).emit('chat message', msg);
         }
