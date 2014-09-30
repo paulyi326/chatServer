@@ -3,6 +3,8 @@ var chatUrl = process.env.chatUrl || 'chat';
 var db = mongojs(chatUrl, ['users']);
 var async = require('async');
 
+// Sends back info about user that logged in such as name,
+// also sends back list of the user's friends
 exports.login = function(req, res) {
 
   console.log('req.query', req.query);
@@ -21,7 +23,7 @@ exports.login = function(req, res) {
         console.log('user in getFriends function', user);
         var userFriends = user.friendIds || [];
 
-        // find all of a user's friend ids and send to client in array
+        // find all of a user's friend ids
         async.map(userFriends, function(friendID, callback) {
           console.log('friendID in async.map', friendID);
 
@@ -31,11 +33,13 @@ exports.login = function(req, res) {
           if (err) {
             res.status(404).send('error in finding friends');
           } else {
+            // if list of friends was found
             if (friends) {
+              // also send back user's name
               var userObj = {
                 friends: friends,
                 name: user.name
-              }
+              };
               res.status(200).send(userObj);
             } else {
               res.send('you have no friends');
@@ -51,20 +55,23 @@ exports.login = function(req, res) {
   });
 };
 
-// helper function used in async call to find all of a users friends
+// helper function used in async map call to find one friend.
+// this function is called repeatedly to find all of a user's friends
 exports.findFriend = function(friendID, callback) {
   db.users.findOne({
     id: friendID
   }, function(err, user) {
     if (err) {
       console.log('error in finding user');
+      // call callback with error, and user as null
       callback(err, null);
     } else {
       if (user) {
         var friend = {
           name: user.name,
           id: user.id
-        }
+        };
+        // call callback with error as null, and with friend that was found 
         callback(null, friend);
       } else {
         console.log('user not found');
@@ -74,10 +81,11 @@ exports.findFriend = function(friendID, callback) {
   });
 };
 
+// saves message to message array of both sender and receiver
 exports.saveMessage = function(msg) {
   console.log(msg);
 
-  // save messages to person who is receiving messages
+  // save messages to receiver
   db.users.findOne({
     id: msg.to
   }, function(err, user) {
@@ -88,6 +96,7 @@ exports.saveMessage = function(msg) {
         // if this is first msg sent to this person, msg array needs to be created
         user.messages[msg.from] = user.messages[msg.from] || [];
 
+        // save message object with a text property and a fromUsrname property
         user.messages[msg.from].push({ text: msg.text, fromUsername: msg.fromUsername });
         db.users.save(user, function(err, user, lastErrObj) {
             console.log('message saved in db');
@@ -98,7 +107,7 @@ exports.saveMessage = function(msg) {
     }
   });
 
-  // also save messages to whoever is sending the messages
+  // also save messages to sender
   db.users.findOne({
     id: msg.from
   }, function(err, user) {
@@ -120,6 +129,7 @@ exports.saveMessage = function(msg) {
   });
 };
 
+// retrieve list of message objects and send to client
 exports.getMessages = function(req, res, io) {
 
   console.log('inside get messages');

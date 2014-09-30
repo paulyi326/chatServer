@@ -54,15 +54,14 @@ io.on('connection', function(socket){
     var userRoom = rooms[msg.to];
 
     // If user is currently in their room
-    // the '>= 1' is because sometimes the same user is in the room twice 
-    // but under different session ids. Idk why yet.
     if (Object.keys(userRoom).length >= 1) {
 
+      // send message to user before saving, for instant messaging
       console.log('message was sent', msg.text)
       io.to(msg.to).emit('chat message', msg); 
     }
 
-    // save messages to db regardless
+    // save messages to db
     api.saveMessage(msg);
 
     console.log('rooms after sending message', rooms);
